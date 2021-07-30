@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  display: grid;
+  min-height: 530px;
+  background: #fff;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead td {
+  font-weight: bold;
+}
+
+table tr {
+  border-bottom: 1px solid gray;
+}
+
+table tbody tr:hover {
+  background: #003147;
+  color: #fff;
+}
+
+table tr td {
+  padding: 9px 5px;
+}
