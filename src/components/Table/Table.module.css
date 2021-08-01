@@ -6,6 +6,12 @@
   padding: 20px;
 }
 
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -26,4 +32,29 @@ table tbody tr:hover {
 
 table tr td {
   padding: 9px 5px;
+}
+
+.columns {
+  display: flex;
+  flex-direction: row;
+}
+
+.colItem {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+}
+
+.colItem:hover {
+  cursor: pointer;
+}
+
+.active {
+  background-color: green;
+  color: #fff;
+}
+
+.hidden {
+  display: none;
 }
