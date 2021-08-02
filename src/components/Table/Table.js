@@ -16,6 +16,7 @@ const Table = () => {
   const [installs, setInstalls] = useState(true);
   const [dau, setDau] = useState(true);
   const [revenue, setRevenue] = useState(true);
+  const [games, setGames] = useState([]);
 
   const loadData = () => {
     axios({
@@ -26,6 +27,8 @@ const Table = () => {
         setData(res.data.data);
         setBackup(res.data.data);
         setTable(res.data.data);
+        const unique = [...new Set(res.data.data.map((item) => item.app))];
+        setGames(unique);
       })
       .catch((err) => {
         console.log(err);
@@ -51,7 +54,6 @@ const Table = () => {
     //   })
     // );
     setTable(backup);
-    console.log(table);
   }, []);
 
   return (
@@ -136,11 +138,48 @@ const Table = () => {
       <table>
         <thead>
           <tr>
-            {app ? <td>App</td> : null}
-            {date ? <td>Date</td> : null}
+            {app ? (
+              <td>
+                App
+                <Menu>
+                  <MenuButton
+                    marginLeft="21px"
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    Filter
+                  </MenuButton>
+                  <MenuList>
+                    {games.map((game) => {
+                      return (
+                        <MenuItem
+                          onClick={() => {
+                            let filtered = data.filter(function (el) {
+                              return el.app == game;
+                            });
+
+                            setTable(filtered);
+                          }}
+                        >
+                          {game}
+                        </MenuItem>
+                      );
+                    })}
+                  </MenuList>
+                </Menu>
+              </td>
+            ) : null}
+            {date ? (
+              <td>
+                <div className={classes.date}>
+                  {" "}
+                  Date <input type="date" /> <input type="date" />{" "}
+                </div>
+              </td>
+            ) : null}
             {platform ? (
               <td>
-                Platform{" "}
+                Platform
                 <Menu>
                   <MenuButton
                     marginLeft="21px"
@@ -155,29 +194,17 @@ const Table = () => {
                         let filtered = data.filter(function (el) {
                           return el.platform == "Android";
                         });
-                        // let filtered = [];
-                        // for (let i = 0; i < data.length; i++) {
-                        //   if (data[i].platform == "Android") {
-                        //     filtered.push(data[i]);
-                        //   }
-                        // }
 
                         setTable(filtered);
                       }}
                     >
-                      Android
+                      Ascending
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
                         let filtered = data.filter(function (el) {
                           return el.platform == "iOS";
                         });
-                        // let filtered = [];
-                        // for (let i = 0; i < data.length; i++) {
-                        //   if (data[i].platform == "Android") {
-                        //     filtered.push(data[i]);
-                        //   }
-                        // }
 
                         setTable(filtered);
                       }}
@@ -188,11 +215,204 @@ const Table = () => {
                 </Menu>
               </td>
             ) : null}
-            {clicks ? <td>Clicks</td> : null}
-            {impr ? <td>Impressions</td> : null}
-            {installs ? <td>Installs</td> : null}
-            {dau ? <td>Dau</td> : null}
-            {revenue ? <td>Revenue</td> : null}
+            {clicks ? (
+              <td>
+                Clicks{" "}
+                <Menu>
+                  <MenuButton
+                    marginLeft="21px"
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    Sort
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
+                          });
+                        };
+
+                        const asd = data.sortBy("clicks");
+
+                        setTable(asd);
+                      }}
+                    >
+                      Ascending
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
+                          });
+                        };
+
+                        const asd = data.sortBy("clicks");
+
+                        setTable(asd);
+                      }}
+                    >
+                      Descending
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </td>
+            ) : null}
+            {impr ? (
+              <td>
+                Impressions{" "}
+                <Menu>
+                  <MenuButton
+                    marginLeft="21px"
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    Sort
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "Android";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Ascending
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "iOS";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Descending
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </td>
+            ) : null}
+            {installs ? (
+              <td>
+                Installs{" "}
+                <Menu>
+                  <MenuButton
+                    marginLeft="21px"
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    Sort
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "Android";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Ascending
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "iOS";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Descending
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </td>
+            ) : null}
+            {dau ? (
+              <td>
+                Dau{" "}
+                <Menu>
+                  <MenuButton
+                    marginLeft="21px"
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    Sort
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "Android";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Ascending
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "iOS";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Descending
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </td>
+            ) : null}
+            {revenue ? (
+              <td>
+                Revenue{" "}
+                <Menu>
+                  <MenuButton
+                    marginLeft="21px"
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                  >
+                    Sort
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "Android";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Ascending
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        let filtered = data.filter(function (el) {
+                          return el.platform == "iOS";
+                        });
+
+                        setTable(filtered);
+                      }}
+                    >
+                      Descending
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </td>
+            ) : null}
           </tr>
         </thead>
         <tbody>
@@ -247,22 +467,24 @@ const Table = () => {
                   </tr>
                 );
               })} */}
-          {table ? table.map((app) => {
-            return (
-              <tr key={app.app + app.dau + app.revenue + app.installs}>
-                <td>{app.app}</td>
-                <td>{app.date}</td>
-                <td>{app.platform}</td>
-                <td>{app.clicks}</td>
-                <td>{app.impressions}</td>
-                <td>{app.installs}</td>
-                <td>{app.dau}</td>
-                <td>
-                  {app.revenue ? app.revenue.toString().slice(0, 8) : null}
-                </td>
-              </tr>
-            );
-          }) : null}
+          {table
+            ? table.map((app) => {
+                return (
+                  <tr key={app.app + app.dau + app.revenue + app.installs}>
+                    <td>{app.app}</td>
+                    <td>{app.date}</td>
+                    <td>{app.platform}</td>
+                    <td>{app.clicks}</td>
+                    <td>{app.impressions}</td>
+                    <td>{app.installs}</td>
+                    <td>{app.dau}</td>
+                    <td>
+                      {app.revenue ? app.revenue.toString().slice(0, 8) : null}
+                    </td>
+                  </tr>
+                );
+              })
+            : null}
         </tbody>
       </table>
     </div>

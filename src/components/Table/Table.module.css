@@ -58,3 +58,8 @@ table tr td {
 .hidden {
   display: none;
 }
+
+.date {
+  display: flex;
+  flex-direction: column;
+}
