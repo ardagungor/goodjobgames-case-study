@@ -1,6 +1,6 @@
 # todos
 
 - ~~ filter and sort functionality ~~
-- hide cols
+- ~~ hide cols ~~
 - graph view
 - visual improvements

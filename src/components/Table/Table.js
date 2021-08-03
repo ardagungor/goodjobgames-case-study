@@ -143,7 +143,7 @@ const Table = () => {
                       return (
                         <MenuItem
                           onClick={() => {
-                            let filtered = data.filter(function (el) {
+                            let filtered = table.filter(function (el) {
                               return el.app == game;
                             });
 
@@ -166,7 +166,7 @@ const Table = () => {
                     selected={date1}
                     dateFormat="yyyy-MM-dd"
                     onChange={(date) => {
-                      let filtered = data.filter(function (el) {
+                      let filtered = table.filter(function (el) {
                         return el.date >= date.toISOString().split("T")[0];
                       });
                       setTable(filtered);
@@ -176,8 +176,8 @@ const Table = () => {
                     selected={date2}
                     dateFormat="yyyy-MM-dd"
                     onChange={(date) => {
-                      setDate2(date)
-                      let filtered = data.filter(function (el) {
+                      setDate2(date);
+                      let filtered = table.filter(function (el) {
                         return el.date <= date.toISOString().split("T")[0];
                       });
                       setTable(filtered);
@@ -200,7 +200,7 @@ const Table = () => {
                   <MenuList>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
+                        let filtered = table.filter(function (el) {
                           return el.platform == "Android";
                         });
 
@@ -210,8 +210,15 @@ const Table = () => {
                       Android
                     </MenuItem>
                     <MenuItem
+                      // onClick={() => {
+                      //   let filtered = data.filter(function (el) {
+                      //     return el.platform == "iOS";
+                      //   });
+
+                      //   setTable(filtered);
+                      // }}
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
+                        let filtered = table.filter(function (el) {
                           return el.platform == "iOS";
                         });
 
@@ -244,7 +251,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("clicks");
+                        const asd = table.sortBy("clicks");
 
                         setTable(asd);
                       }}
@@ -259,7 +266,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("clicks");
+                        const asd = table.sortBy("clicks");
 
                         setTable(asd);
                       }}
@@ -290,7 +297,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("impressions");
+                        const asd = table.sortBy("impressions");
 
                         setTable(asd);
                       }}
@@ -305,7 +312,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("impressions");
+                        const asd = table.sortBy("impressions");
 
                         setTable(asd);
                       }}
@@ -336,7 +343,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("installs");
+                        const asd = table.sortBy("installs");
 
                         setTable(asd);
                       }}
@@ -351,7 +358,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("installs");
+                        const asd = table.sortBy("installs");
 
                         setTable(asd);
                       }}
@@ -382,7 +389,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("dau");
+                        const asd = table.sortBy("dau");
 
                         setTable(asd);
                       }}
@@ -397,7 +404,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("dau");
+                        const asd = table.sortBy("dau");
 
                         setTable(asd);
                       }}
@@ -428,7 +435,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("revenue");
+                        const asd = table.sortBy("revenue");
 
                         setTable(asd);
                       }}
@@ -443,7 +450,7 @@ const Table = () => {
                           });
                         };
 
-                        const asd = data.sortBy("revenue");
+                        const asd = table.sortBy("revenue");
 
                         setTable(asd);
                       }}
@@ -458,18 +465,35 @@ const Table = () => {
         </thead>
         <tbody>
           {table
-            ? table.map((app) => {
+            ? table.map((item) => {
                 return (
-                  <tr key={app.app + app.dau + app.revenue + app.installs}>
-                    <td>{app.app}</td>
-                    <td>{app.date}</td>
-                    <td>{app.platform}</td>
-                    <td>{app.clicks}</td>
-                    <td>{app.impressions}</td>
-                    <td>{app.installs}</td>
-                    <td>{app.dau}</td>
-                    <td>
-                      {app.revenue ? app.revenue.toString().slice(0, 8) : null}
+                  <tr key={item.app + item.dau + item.revenue + item.installs}>
+                    <td style={app === true ? {} : { display: "none" }}>
+                      {item.app}
+                    </td>
+                    <td style={date === true ? {} : { display: "none" }}>
+                      {item.date}
+                    </td>
+                    <td style={platform === true ? {} : { display: "none" }}>
+                      {item.platform}
+                    </td>
+                    <td style={clicks === true ? {} : { display: "none" }}>
+                      {item.clicks}
+                    </td>
+                    <td style={impr === true ? {} : { display: "none" }}>
+                      {" "}
+                      {item.impressions}
+                    </td>
+                    <td style={installs === true ? {} : { display: "none" }}>
+                      {item.installs}
+                    </td>
+                    <td style={dau === true ? {} : { display: "none" }}>
+                      {item.dau}
+                    </td>
+                    <td style={revenue === true ? {} : { display: "none" }}>
+                      {item.revenue
+                        ? item.revenue.toString().slice(0, 8)
+                        : null}
                     </td>
                   </tr>
                 );
