@@ -1,5 +1,6 @@
 # todos
-* filter and sort functionality
-* hide cols
-* graph view
-* visual improvements
+
+- ~~ filter and sort functionality ~~
+- hide cols
+- graph view
+- visual improvements

@@ -3,6 +3,8 @@ import classes from "./Table.module.css";
 import axios from "axios";
 import { Menu, Button, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Table = () => {
   const [data, setData] = useState([]);
@@ -17,6 +19,8 @@ const Table = () => {
   const [dau, setDau] = useState(true);
   const [revenue, setRevenue] = useState(true);
   const [games, setGames] = useState([]);
+  const [date1, setDate1] = useState(new Date());
+  const [date2, setDate2] = useState(new Date());
 
   const loadData = () => {
     axios({
@@ -29,6 +33,7 @@ const Table = () => {
         setTable(res.data.data);
         const unique = [...new Set(res.data.data.map((item) => item.app))];
         setGames(unique);
+        console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -37,22 +42,6 @@ const Table = () => {
 
   useEffect(() => {
     loadData();
-    // setTable(
-    //   data.map((app) => {
-    //     return (
-    //       <tr>
-    //         <td style={app == true ? { display: "none" } : {}}>{app.app}</td>
-    //         <td>{app.date}</td>
-    //         <td>{app.platform}</td>
-    //         <td>{app.clicks}</td>
-    //         <td>{app.impressions}</td>
-    //         <td>{app.installs}</td>
-    //         <td>{app.dau}</td>
-    //         <td>{app.revenue.toString().slice(0, 8)}</td>
-    //       </tr>
-    //     );
-    //   })
-    // );
     setTable(backup);
   }, []);
 
@@ -172,8 +161,28 @@ const Table = () => {
             {date ? (
               <td>
                 <div className={classes.date}>
-                  {" "}
-                  Date <input type="date" /> <input type="date" />{" "}
+                  Date
+                  <DatePicker
+                    selected={date1}
+                    dateFormat="yyyy-MM-dd"
+                    onChange={(date) => {
+                      let filtered = data.filter(function (el) {
+                        return el.date >= date.toISOString().split("T")[0];
+                      });
+                      setTable(filtered);
+                    }}
+                  />
+                  <DatePicker
+                    selected={date2}
+                    dateFormat="yyyy-MM-dd"
+                    onChange={(date) => {
+                      setDate2(date)
+                      let filtered = data.filter(function (el) {
+                        return el.date <= date.toISOString().split("T")[0];
+                      });
+                      setTable(filtered);
+                    }}
+                  />
                 </div>
               </td>
             ) : null}
@@ -198,7 +207,7 @@ const Table = () => {
                         setTable(filtered);
                       }}
                     >
-                      Ascending
+                      Android
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -275,22 +284,30 @@ const Table = () => {
                   <MenuList>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "Android";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("impressions");
+
+                        setTable(asd);
                       }}
                     >
                       Ascending
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "iOS";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("impressions");
+
+                        setTable(asd);
                       }}
                     >
                       Descending
@@ -313,22 +330,30 @@ const Table = () => {
                   <MenuList>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "Android";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("installs");
+
+                        setTable(asd);
                       }}
                     >
                       Ascending
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "iOS";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("installs");
+
+                        setTable(asd);
                       }}
                     >
                       Descending
@@ -351,22 +376,30 @@ const Table = () => {
                   <MenuList>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "Android";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("dau");
+
+                        setTable(asd);
                       }}
                     >
                       Ascending
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "iOS";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("dau");
+
+                        setTable(asd);
                       }}
                     >
                       Descending
@@ -389,22 +422,30 @@ const Table = () => {
                   <MenuList>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "Android";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("revenue");
+
+                        setTable(asd);
                       }}
                     >
                       Ascending
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        let filtered = data.filter(function (el) {
-                          return el.platform == "iOS";
-                        });
+                        Array.prototype.sortBy = function (p) {
+                          return this.slice(0).sort(function (a, b) {
+                            return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
+                          });
+                        };
 
-                        setTable(filtered);
+                        const asd = data.sortBy("revenue");
+
+                        setTable(asd);
                       }}
                     >
                       Descending
@@ -416,57 +457,6 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          {/* {data.map((app) => {
-            return (
-              <tr>
-                <td
-                  style={
-                    app === true ? { display: "block" } : { display: "none" }
-                  }
-                >
-                  {app.app}
-                </td>
-                <td>{app.date}</td>
-                <td>{app.platform}</td>
-                <td>{app.clicks}</td>
-                <td>{app.impressions}</td>
-                <td>{app.installs}</td>
-                <td>{app.dau}</td>
-                <td>{app.revenue.toString().slice(0, 8)}</td>
-              </tr>
-            );
-          })} */}
-          {/* {table
-            ? table.map((app) => {
-                return (
-                  <tr key={app.app + app.dau + app.revenue + app.installs}>
-                    <td>{app.app}</td>
-                    <td>{app.date}</td>
-                    <td>{app.platform}</td>
-                    <td>{app.clicks}</td>
-                    <td>{app.impressions}</td>
-                    <td>{app.installs}</td>
-                    <td>{app.dau}</td>
-                    <td>
-                      {app.revenue ? app.revenue.toString().slice(0, 8) : null}
-                    </td>
-                  </tr>
-                );
-              })
-            : data.map((app) => {
-                return (
-                  <tr key={app.app + app.dau + app.revenue + app.installs}>
-                    <td>{app.app}</td>
-                    <td>{app.date}</td>
-                    <td>{app.platform}</td>
-                    <td>{app.clicks}</td>
-                    <td>{app.impressions}</td>
-                    <td>{app.installs}</td>
-                    <td>{app.dau}</td>
-                    <td>{app.revenue.toString().slice(0, 8)}</td>
-                  </tr>
-                );
-              })} */}
           {table
             ? table.map((app) => {
                 return (
