@@ -44,6 +44,7 @@ table tr td {
   padding-right: 10px;
   margin-right: 5px;
   border-radius: 5px;
+  background-color:#cccccc;
 }
 
 .colItem:hover {
