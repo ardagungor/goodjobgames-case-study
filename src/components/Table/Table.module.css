@@ -44,7 +44,7 @@ table tr td {
   padding-right: 10px;
   margin-right: 5px;
   border-radius: 5px;
-  background-color:#cccccc;
+  background-color: #cccccc;
 }
 
 .colItem:hover {
@@ -63,4 +63,9 @@ table tr td {
 .date {
   display: flex;
   flex-direction: column;
+}
+
+.chartContainer {
+  justify-content: center;
+  display: flex;
 }
