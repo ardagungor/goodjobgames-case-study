@@ -33,15 +33,7 @@ const Table = () => {
   const [tableView, setTableView] = useState(true);
   const [date1, setDate1] = useState(new Date(2020, 4, 2));
   const [date2, setDate2] = useState(new Date(2020, 6, 30));
-  const [graphData, setGraphData] = useState([
-    { date: "2020-07-30", price: 52342 },
-    { date: "2020-07-31", price: 51104 },
-    { date: "2020-08-01", price: 55643 },
-    { date: "2020-08-02", price: 54342 },
-    { date: "2020-08-03", price: 63562 },
-    { date: "2020-08-04", price: 51905 },
-    { date: "2020-08-05", price: 54367 },
-  ]);
+  const [graphData, setGraphData] = useState([]);
   const [label, setLabel] = useState("");
 
   const loadData = () => {
@@ -70,7 +62,7 @@ const Table = () => {
   return (
     <div className={classes.container}>
       <div className={classes.controls}>
-        <div className={classes.columns}>
+        <div className={tableView === true ? classes.columns : classes.hidden}>
           <div
             className={
               app ? classes.colItem + " " + classes.active : classes.colItem
@@ -166,20 +158,13 @@ const Table = () => {
             }
             onClick={() => {
               setTableView(!tableView);
-              let arr = [];
-              table.forEach((element) => {
-                arr.push({ date: element.date, clicks: element.clicks });
-              });
-
-              setGraphData(arr);
-              console.log(graphData);
             }}
           >
             Graph View
           </button>
         </div>
       </div>
-      <table>
+      <table className={tableView === true ? null : classes.hidden}>
         <thead>
           <tr>
             {app ? (
@@ -557,7 +542,9 @@ const Table = () => {
             : null}
         </tbody>
       </table>
-      <div className={classes.chartContainer}>
+      <div
+        className={tableView === true ? classes.hidden : classes.chartContainer}
+      >
         <LineChart
           width={950}
           height={500}
@@ -565,8 +552,8 @@ const Table = () => {
           margin={{ top: 40, right: 40, bottom: 20, left: 20 }}
         >
           <CartesianGrid vertical={false} />
-          <XAxis dataKey="date" label="Date" />
-          <YAxis domain={["auto", "auto"]} label="Stock Price" />
+          <XAxis dataKey="date" />
+          <YAxis domain={["auto", "auto"]} />
           <Tooltip
             wrapperStyle={{
               borderColor: "white",
@@ -575,7 +562,7 @@ const Table = () => {
             contentStyle={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
             labelStyle={{ fontWeight: "bold", color: "#666666" }}
           />
-          <Line dataKey="clicks" stroke="#ff7300" dot={true} />
+          <Line dataKey="value" stroke="#ff7300" dot={true} />
           <Brush dataKey="date" startIndex={graphData.length - 40}>
             <AreaChart>
               <CartesianGrid />
@@ -589,6 +576,113 @@ const Table = () => {
             </AreaChart>
           </Brush>
         </LineChart>
+        <div className={classes.controls}>
+          <div
+            className={
+              label == "Clicks"
+                ? classes.colItem + " " + classes.active
+                : classes.colItem
+            }
+            onClick={() => {
+              setLabel("Clicks");
+              let arr = [];
+              table.forEach((element) => {
+                arr.push({
+                  date: element.date,
+                  value: element.clicks,
+                  app: app.app,
+                });
+              });
+              setGraphData(arr);
+            }}
+          >
+            Clicks
+          </div>
+          <div
+            className={
+              label == "Impressions"
+                ? classes.colItem + " " + classes.active
+                : classes.colItem
+            }
+            onClick={() => {
+              setLabel("Impressions");
+              let arr = [];
+              table.forEach((element) => {
+                arr.push({
+                  date: element.date,
+                  value: element.impressions,
+                  app: app.app,
+                });
+              });
+              setGraphData(arr);
+            }}
+          >
+            Impressions
+          </div>
+          <div
+            className={
+              label == "Installs"
+                ? classes.colItem + " " + classes.active
+                : classes.colItem
+            }
+            onClick={() => {
+              setLabel("Installs");
+              let arr = [];
+              table.forEach((element) => {
+                arr.push({
+                  date: element.date,
+                  value: element.installs,
+                  app: app.app,
+                });
+              });
+              setGraphData(arr);
+            }}
+          >
+            Installs
+          </div>
+          <div
+            className={
+              label == "Dau"
+                ? classes.colItem + " " + classes.active
+                : classes.colItem
+            }
+            onClick={() => {
+              setLabel("Dau");
+              let arr = [];
+              table.forEach((element) => {
+                arr.push({
+                  date: element.date,
+                  value: element.dau,
+                  app: app.app,
+                });
+              });
+              setGraphData(arr);
+            }}
+          >
+            Dau
+          </div>
+          <div
+            className={
+              label == "Revenue"
+                ? classes.colItem + " " + classes.active
+                : classes.colItem
+            }
+            onClick={() => {
+              setLabel("Revenue");
+              let arr = [];
+              table.forEach((element) => {
+                arr.push({
+                  date: element.date,
+                  value: element.revenue,
+                  app: app.app,
+                });
+              });
+              setGraphData(arr);
+            }}
+          >
+            Revenue
+          </div>
+        </div>
       </div>
     </div>
   );

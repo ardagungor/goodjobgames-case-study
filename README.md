@@ -2,5 +2,5 @@
 
 - ~~ filter and sort functionality ~~
 - ~~ hide cols ~~
-- graph view
+- ~~ graph view ~~
 - visual improvements
