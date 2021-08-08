@@ -5,22 +5,15 @@ import { Menu, Button, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  Brush,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  LineChart,
-  Line,
-  Tooltip,
-} from "recharts";
+import Graph from "../Graph/Graph";
 
 const Table = () => {
+  // used for showing, manipulating and backing up data
   const [data, setData] = useState([]);
   const [table, setTable] = useState();
   const [backup, setBackup] = useState([]);
+
+  // used for showing the data and other operations such as hiding/showing columns
   const [app, setApp] = useState(false);
   const [date, setDate] = useState(true);
   const [platform, setPlatform] = useState(false);
@@ -30,11 +23,13 @@ const Table = () => {
   const [dau, setDau] = useState(true);
   const [revenue, setRevenue] = useState(true);
   const [games, setGames] = useState([]);
+
+  //used for toggling between table and graph view
   const [tableView, setTableView] = useState(true);
+
+  // used for filtering between two dates
   const [date1, setDate1] = useState(new Date(2020, 4, 2));
   const [date2, setDate2] = useState(new Date(2020, 6, 30));
-  const [graphData, setGraphData] = useState([]);
-  const [label, setLabel] = useState("");
 
   const loadData = () => {
     axios({
@@ -47,7 +42,6 @@ const Table = () => {
         setTable(res.data.data);
         const unique = [...new Set(res.data.data.map((item) => item.app))];
         setGames(unique);
-        console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -105,8 +99,6 @@ const Table = () => {
             }
             onClick={() => {
               setImpr(!impr);
-              console.log(table);
-              console.log(data);
             }}
           >
             Impressions
@@ -183,10 +175,9 @@ const Table = () => {
                       return (
                         <MenuItem
                           onClick={() => {
-                            let filtered = table.filter(function (el) {
+                            let filtered = backup.filter(function (el) {
                               return el.app == game;
                             });
-
                             setTable(filtered);
                           }}
                         >
@@ -202,28 +193,39 @@ const Table = () => {
               <td>
                 <div className={classes.date}>
                   Date
-                  <DatePicker
-                    selected={date1}
-                    dateFormat="yyyy-MM-dd"
-                    onChange={(date) => {
-                      let filtered = table.filter(function (el) {
-                        return el.date > date.toISOString().split("T")[0];
-                      });
-                      setTable(filtered);
-                      setDate1(date);
-                    }}
-                  />
+                  <div
+                    style={{ borderBottom: "1px solid black", width: "35%" }}
+                  >
+                    <DatePicker
+                      selected={date1}
+                      dateFormat="yyyy-MM-dd"
+                      onChange={(date) => {
+                        setDate1(date);
+                      }}
+                    />{" "}
+                  </div>
                   <DatePicker
                     selected={date2}
                     dateFormat="yyyy-MM-dd"
                     onChange={(date) => {
-                      let filtered = table.filter(function (el) {
-                        return el.date < date.toISOString().split("T")[0];
-                      });
-                      setTable(filtered);
                       setDate2(date);
                     }}
                   />
+                  <button
+                    className={classes.active}
+                    style={{ background: "  #003147 " }}
+                    onClick={() => {
+                      let filtered = table.filter(function (el) {
+                        return (
+                          el.date > date1.toISOString().substr(0, 10) &&
+                          el.date <= date2.toISOString().substr(0, 10)
+                        );
+                      });
+                      setTable(filtered);
+                    }}
+                  >
+                    Filter
+                  </button>
                 </div>
               </td>
             ) : null}
@@ -251,18 +253,10 @@ const Table = () => {
                       Android
                     </MenuItem>
                     <MenuItem
-                      // onClick={() => {
-                      //   let filtered = data.filter(function (el) {
-                      //     return el.platform == "iOS";
-                      //   });
-
-                      //   setTable(filtered);
-                      // }}
                       onClick={() => {
                         let filtered = table.filter(function (el) {
                           return el.platform == "iOS";
                         });
-
                         setTable(filtered);
                       }}
                     >
@@ -291,10 +285,8 @@ const Table = () => {
                             return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("clicks");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("clicks");
+                        setTable(newTable);
                       }}
                     >
                       Ascending
@@ -306,10 +298,8 @@ const Table = () => {
                             return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("clicks");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("clicks");
+                        setTable(newTable);
                       }}
                     >
                       Descending
@@ -337,10 +327,8 @@ const Table = () => {
                             return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("impressions");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("impressions");
+                        setTable(newTable);
                       }}
                     >
                       Ascending
@@ -352,10 +340,8 @@ const Table = () => {
                             return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("impressions");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("impressions");
+                        setTable(newTable);
                       }}
                     >
                       Descending
@@ -383,10 +369,8 @@ const Table = () => {
                             return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("installs");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("installs");
+                        setTable(newTable);
                       }}
                     >
                       Ascending
@@ -398,10 +382,8 @@ const Table = () => {
                             return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("installs");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("installs");
+                        setTable(newTable);
                       }}
                     >
                       Descending
@@ -429,10 +411,8 @@ const Table = () => {
                             return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("dau");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("dau");
+                        setTable(newTable);
                       }}
                     >
                       Ascending
@@ -444,10 +424,8 @@ const Table = () => {
                             return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("dau");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("dau");
+                        setTable(newTable);
                       }}
                     >
                       Descending
@@ -475,10 +453,8 @@ const Table = () => {
                             return a[p] > b[p] ? 1 : a[p] < b[p] ? -1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("revenue");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("revenue");
+                        setTable(newTable);
                       }}
                     >
                       Ascending
@@ -490,10 +466,8 @@ const Table = () => {
                             return a[p] > b[p] ? -1 : a[p] < b[p] ? 1 : 0;
                           });
                         };
-
-                        const asd = table.sortBy("revenue");
-
-                        setTable(asd);
+                        const newTable = table.sortBy("revenue");
+                        setTable(newTable);
                       }}
                     >
                       Descending
@@ -545,144 +519,7 @@ const Table = () => {
       <div
         className={tableView === true ? classes.hidden : classes.chartContainer}
       >
-        <LineChart
-          width={950}
-          height={500}
-          data={graphData}
-          margin={{ top: 40, right: 40, bottom: 20, left: 20 }}
-        >
-          <CartesianGrid vertical={false} />
-          <XAxis dataKey="date" />
-          <YAxis domain={["auto", "auto"]} />
-          <Tooltip
-            wrapperStyle={{
-              borderColor: "white",
-              boxShadow: "2px 2px 3px 0px rgb(204, 204, 204)",
-            }}
-            contentStyle={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
-            labelStyle={{ fontWeight: "bold", color: "#666666" }}
-          />
-          <Line dataKey="value" stroke="#ff7300" dot={true} />
-          <Brush dataKey="date" startIndex={graphData.length - 40}>
-            <AreaChart>
-              <CartesianGrid />
-              <YAxis hide domain={["auto", "auto"]} />
-              <Area
-                dataKey="price"
-                stroke="#ff7300"
-                fill="#ff7300"
-                dot={true}
-              />
-            </AreaChart>
-          </Brush>
-        </LineChart>
-        <div className={classes.controls}>
-          <div
-            className={
-              label == "Clicks"
-                ? classes.colItem + " " + classes.active
-                : classes.colItem
-            }
-            onClick={() => {
-              setLabel("Clicks");
-              let arr = [];
-              table.forEach((element) => {
-                arr.push({
-                  date: element.date,
-                  value: element.clicks,
-                  app: app.app,
-                });
-              });
-              setGraphData(arr);
-            }}
-          >
-            Clicks
-          </div>
-          <div
-            className={
-              label == "Impressions"
-                ? classes.colItem + " " + classes.active
-                : classes.colItem
-            }
-            onClick={() => {
-              setLabel("Impressions");
-              let arr = [];
-              table.forEach((element) => {
-                arr.push({
-                  date: element.date,
-                  value: element.impressions,
-                  app: app.app,
-                });
-              });
-              setGraphData(arr);
-            }}
-          >
-            Impressions
-          </div>
-          <div
-            className={
-              label == "Installs"
-                ? classes.colItem + " " + classes.active
-                : classes.colItem
-            }
-            onClick={() => {
-              setLabel("Installs");
-              let arr = [];
-              table.forEach((element) => {
-                arr.push({
-                  date: element.date,
-                  value: element.installs,
-                  app: app.app,
-                });
-              });
-              setGraphData(arr);
-            }}
-          >
-            Installs
-          </div>
-          <div
-            className={
-              label == "Dau"
-                ? classes.colItem + " " + classes.active
-                : classes.colItem
-            }
-            onClick={() => {
-              setLabel("Dau");
-              let arr = [];
-              table.forEach((element) => {
-                arr.push({
-                  date: element.date,
-                  value: element.dau,
-                  app: app.app,
-                });
-              });
-              setGraphData(arr);
-            }}
-          >
-            Dau
-          </div>
-          <div
-            className={
-              label == "Revenue"
-                ? classes.colItem + " " + classes.active
-                : classes.colItem
-            }
-            onClick={() => {
-              setLabel("Revenue");
-              let arr = [];
-              table.forEach((element) => {
-                arr.push({
-                  date: element.date,
-                  value: element.revenue,
-                  app: app.app,
-                });
-              });
-              setGraphData(arr);
-            }}
-          >
-            Revenue
-          </div>
-        </div>
+        <Graph table={table} />
       </div>
     </div>
   );
